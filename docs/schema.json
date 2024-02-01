@@ -1,0 +1,121 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Emoji Encryption and Decryption API",
+        "description": "A Flask-based API for encrypting and decrypting text using emojis.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://cipher.api.webally.co.za"
+        }
+    ],
+    "security": [
+        {
+            "ApiKeyAuth": []
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-API-Key"
+            }
+        }
+    },
+    "paths": {
+        "/encrypt": {
+            "post": {
+                "summary": "Encrypt text",
+                "description": "Encrypts plain text into a string of emojis.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "description": "Plain text to encrypt."
+                                    }
+                                },
+                                "required": [
+                                    "text"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Text successfully encrypted.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "encrypted_text": {
+                                            "type": "string",
+                                            "description": "Encrypted text represented by emojis."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, possibly due to missing text in the request body."
+                    }
+                }
+            }
+        },
+        "/decrypt": {
+            "post": {
+                "summary": "Decrypt text",
+                "description": "Decrypts a string of emojis back into plain text.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "encrypted_text": {
+                                        "type": "string",
+                                        "description": "Encrypted text (emojis) to decrypt."
+                                    }
+                                },
+                                "required": [
+                                    "encrypted_text"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Text successfully decrypted.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "text": {
+                                            "type": "string",
+                                            "description": "Decrypted plain text."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, possibly due to missing encrypted_text in the request body."
+                    }
+                }
+            }
+        }
+    }
+}
