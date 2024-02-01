@@ -110,4 +110,9 @@ Specify your license or state that the project is unlicensed.
 For support or feedback, contact us at [charl@webally.co.za](mailto:charl@webally.co.za).
 ```
 
+## Project Chat
+```sh
+[GTP-4 Chat](https://chat.openai.com/g/g-eBjCfkEtV-ignite-code-x/c/a2baf76f-722d-498c-a922-10502a557a3e)
+```
+
 
