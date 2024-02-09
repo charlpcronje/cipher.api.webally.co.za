@@ -2,6 +2,7 @@
 # Utility module for authentication functions in the Flask API
 
 import json
+import logging
 
 def load_users(file_path="users.json"):
     """
@@ -14,6 +15,7 @@ def load_users(file_path="users.json"):
     - list: A list of user dictionaries.
     """
     try:
+        logging.info(f"Loading users from {file_path}")
         with open(file_path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except Exception as e:
@@ -30,6 +32,7 @@ def verify_api_key(api_key):
     Returns:
     - tuple: (bool, dict) indicating whether the API key is valid, and the user data.
     """
+    logging.info(f"Verifying API Key: {api_key}")
     users = load_users()
     for user in users:
         if user["api_key"] == api_key:

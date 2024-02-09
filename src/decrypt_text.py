@@ -2,6 +2,8 @@
 # Decrypts the encrypted emoji text back into the original text.
 
 import json
+import logging
+import re
 
 def load_cipher(file_path="cipher.json"):
     """
@@ -13,14 +15,18 @@ def load_cipher(file_path="cipher.json"):
     Returns:
     - dict: A dictionary with characters as keys and lists of emojis as values.
     """
+    logging.info(f"Loading cipher from {file_path}")
     try:
+        logging.info(f"Loading cipher from {file_path}")
         with open(file_path, 'r', encoding='utf-8') as file:
-            return json.load(file)
+            cipher = json.load(file)
+            logging.info("Cipher loaded successfully")
+            return cipher
     except FileNotFoundError:
-        print("Cipher file not found.")
+        logging.error("Cipher file not found.")
         return {}
     except json.JSONDecodeError:
-        print("Invalid JSON format in cipher file.")
+        logging.error("Invalid JSON format in cipher file.")
         return {}
 
 def decrypt_text(encrypted_text, cipher_path="cipher.json"):
@@ -34,10 +40,15 @@ def decrypt_text(encrypted_text, cipher_path="cipher.json"):
     Returns:
     - str: The decrypted text, with emojis replaced by their corresponding characters.
     """
+    logging.info("Starting decryption")
     cipher = load_cipher(cipher_path)
-    # Create an inverse mapping from emoji to character
-    emoji_to_char = {emoji: char for char, emojis in cipher.items() for emoji in emojis}
-    decrypted_text = ""
-    for emoji in encrypted_text:
-        decrypted_text += emoji_to_char.get(emoji, emoji)  # Default to the emoji itself if not found
+    # Inverting the cipher for decryption: mapping each emoji to its corresponding character
+    emoji_to_char = {v: k for k, vs in cipher.items() for v in vs}
+
+    # Prepare a regex pattern to match any of the emojis in the text
+    pattern = '|'.join(re.escape(emoji) for emoji in emoji_to_char.keys())
+    # Use the pattern to find and replace each emoji in the encrypted text
+    decrypted_text = re.sub(pattern, lambda match: emoji_to_char[match.group(0)], encrypted_text)
+
+    logging.info("Decryption completed")
     return decrypted_text

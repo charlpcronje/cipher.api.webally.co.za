@@ -5,8 +5,9 @@ import requests
 import subprocess
 import json
 import os
+import logging
 
-def get_first_api_key(file_path="users.json"):
+def get_first_api_key(file_path="../users.json"):
     """
     Reads the users.json file and returns the first API key found.
     """
@@ -29,6 +30,7 @@ class TestCipherAPI(unittest.TestCase):
         url = "http://localhost:5100/encrypt"
         headers = {"X-API-Key": api_key}
         data = {"text": "test"}
+        logging.info("Testing /encrypt endpoint")
         response = requests.post(url, json=data, headers=headers)
 
         result_md = f"## Test Encrypt Endpoint\n" \
@@ -53,6 +55,7 @@ class TestCipherAPI(unittest.TestCase):
         headers = {"X-API-Key": api_key}
         # Assuming '🔒📄' is the encrypted text for 'test'
         data = {"encrypted_text": "🔒📄"}
+        logging.info("Testing /decrypt endpoint")
         response = requests.post(url, json=data, headers=headers)
 
         result_md = f"## Test Decrypt Endpoint\n" \
@@ -70,7 +73,8 @@ class TestCipherAPI(unittest.TestCase):
         """
         Test the CLI encrypt command.
         """
-        command = ["python", "cli.py", "encrypt", "test"]
+        command = ["python", "/var/www/tools/cipher.api.webally.co.za/src/cli.py", "encrypt", "test"]
+        logging.info(f"Testing CLI encrypt command with text: 'test'")
         result = subprocess.run(command, capture_output=True, text=True)
         output = result.stdout.strip()
 
@@ -90,7 +94,8 @@ class TestCipherAPI(unittest.TestCase):
         Test the CLI decrypt command.
         """
         # Assuming '🔒📄' is the encrypted text for 'test'
-        command = ["python", "cli.py", "decrypt", "🔒📄"]
+        command = ["python", "/var/www/tools/cipher.api.webally.co.za/src/cli.py", "decrypt", "🥲🥲"]
+        logging.info("Testing CLI decrypt command with encrypted text")
         result = subprocess.run(command, capture_output=True, text=True)
         output = result.stdout.strip()
 

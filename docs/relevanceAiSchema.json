@@ -1,116 +1,82 @@
 {
-    "openapi": "3.0.3",
     "info": {
-        "title": "Emoji Cipher API",
-        "version": "1.0.0"
+        "title": "Relevance AI Tools",
+        "version": "latest"
     },
-    "servers": [
-        {
-            "url": "https://cipher.api.webally.co.za/"
-        }
-    ],
     "paths": {
-        "/encrypt": {
+        "/studios/3fe0211f-1e14-43da-a819-fa1a7dfe463d/trigger_llm_friendly": {
             "post": {
-                "operationId": "encryptText",
-                "summary": "Encrypt Text",
-                "description": "Encrypts plain text into emoji cipher text.",
+                "operationId": "Super_secretive_emoji_cipher_-_decrypt",
+                "summary": "Super Secretive Emoji Cipher - Decrypt",
+                "description": "Emoji Cipher, is designed to offer approach to encryption and decryption, transforming text into emojis and vice versa for secure communication",
                 "security": [
                     {
                         "AuthorizationHeader": []
                     }
                 ],
                 "requestBody": {
-                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/EncryptRequestBodySchema"
+                                "$ref": "#/components/schemas/3fe0211f-1e14-43da-a819-fa1a7dfe463dRequestBodySchema"
                             }
                         }
-                    }
+                    },
+                    "required": true
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully encrypted text.",
+                        "description": "successful operation",
                         "content": {
                             "application/json": {}
                         }
-                    },
-                    "400": {
-                        "description": "Bad request (missing 'text' in request body)."
-                    },
-                    "401": {
-                        "description": "Unauthorized access (missing or invalid API key)."
                     }
                 }
             }
         },
-        "/decrypt": {
+        "/studios/56e89d63-a1e3-4529-a9fd-0608ac068ef0/trigger_llm_friendly": {
             "post": {
-                "operationId": "decryptText",
-                "summary": "Decrypt Text",
-                "description": "Decrypts emoji cipher text back into plain text.",
+                "operationId": "Super_secretive_emoji_cipher",
+                "summary": "Super Secretive Emoji Cipher",
+                "description": "Emoji Cipher, is designed to offer approach to encryption and decryption, transforming text into emojis and vice versa for secure communication",
                 "security": [
                     {
                         "AuthorizationHeader": []
                     }
                 ],
                 "requestBody": {
-                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/DecryptRequestBodySchema"
+                                "$ref": "#/components/schemas/56e89d63-a1e3-4529-a9fd-0608ac068ef0RequestBodySchema"
                             }
                         }
-                    }
+                    },
+                    "required": true
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully decrypted text.",
+                        "description": "successful operation",
                         "content": {
                             "application/json": {}
                         }
-                    },
-                    "400": {
-                        "description": "Bad request (missing 'encrypted_text' in request body)."
-                    },
-                    "401": {
-                        "description": "Unauthorized access (missing or invalid API key)."
                     }
                 }
             }
         }
     },
+    "openapi": "3.0.0",
+    "servers": [
+        {
+            "url": "https://api-d7b62b.stack.tryrelevance.com/latest"
+        }
+    ],
     "components": {
         "schemas": {
-            "EncryptRequestBodySchema": {
-                "type": "object",
-                "properties": {
-                    "text": {
-                        "type": "string",
-                        "description": "Plain text to be encrypted.",
-                        "metadata": {
-                            "content_type": "long_text"
-                        },
-                        "frontend_metadata": {
-                            "required": true
-                        },
-                        "order": 0,
-                        "title": "Text to Encrypt"
-                    }
-                },
-                "required": [
-                    "text"
-                ]
-            },
-            "DecryptRequestBodySchema": {
-                "type": "object",
+            "3fe0211f-1e14-43da-a819-fa1a7dfe463dRequestBodySchema": {
                 "properties": {
                     "encrypted_text": {
                         "type": "string",
-                        "description": "Emoji cipher text to be decrypted.",
                         "metadata": {
                             "content_type": "long_text"
                         },
@@ -118,27 +84,49 @@
                             "required": true
                         },
                         "order": 0,
-                        "title": "Emojis to Decrypt to Text"
+                        "title": "Text to Decrypt",
+                        "description": "Text to encrypt to emojis"
                     }
                 },
                 "required": [
                     "encrypted_text"
-                ]
+                ],
+                "type": "object"
+            },
+            "56e89d63-a1e3-4529-a9fd-0608ac068ef0RequestBodySchema": {
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "metadata": {
+                            "content_type": "long_text"
+                        },
+                        "frontend_metadata": {
+                            "required": true
+                        },
+                        "order": 0,
+                        "title": "Text to Encrypt",
+                        "description": "Text to encrypt to emojis"
+                    }
+                },
+                "required": [
+                    "text"
+                ],
+                "type": "object"
             }
         },
         "securitySchemes": {
             "AuthorizationHeader": {
                 "type": "apiKey",
                 "in": "header",
-                "name": "X-API-Key",
-                "description": "API key for authorizing requests. Expected format for the header is 'Bearer <API_KEY>'."
+                "name": "Authorization",
+                "description": "Authorization credentials. Header authorization should be in the form of: project:api_key"
             }
         }
     },
     "security": [
         {
             "AuthorizationHeader": [
-                "X-API-Key"
+                "Authorization"
             ]
         }
     ]

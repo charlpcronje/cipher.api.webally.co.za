@@ -1,75 +1,113 @@
-
-openapi: 3.0.0
+openapi: 3.0.3
 info:
-  title: Emoji Encryption and Decryption API
-  description: A Flask-based API for encrypting and decrypting text using emojis.
-  version: "1.0.0"
+  title: Emoji Cipher API
+  description: API for encrypting and decrypting text using emoji ciphers.
+  version: 1.0.0
 servers:
-  - url: https://cipher.api.webally.co.za
-security:
-  - ApiKeyAuth: []
+  - url: https://cipher.api.webally.co.za/
+paths:
+  /encrypt:
+    post:
+      operationId: encryptText
+      summary: Encrypt text
+      description: Encrypts plain text into emoji cipher text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptRequest'
+      responses:
+        '200':
+          description: Successfully encrypted text.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptResponse'
+        '400':
+          description: Bad request (missing 'text' in request body).
+        '401':
+          description: Unauthorized access (missing or invalid API key).
+      security:
+        - ApiKeyAuth: []
+          scheme: bearer
+          bearerFormat: Authorization
+
+  /decrypt:
+    post:
+      operationId: decryptText
+      summary: Decrypt text
+      description: Decrypts emoji cipher text back into plain text.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DecryptRequest'
+      responses:
+        '200':
+          description: Successfully decrypted text.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecryptResponse'
+        '400':
+          description: Bad request (missing 'encrypted_text' in request body).
+        '401':
+          description: Unauthorized access (missing or invalid API key).
+      security:
+        - ApiKeyAuth: []
+          scheme: bearer
+          bearerFormat: Authorization
+  /privacy-policy:
+    get:
+      operationId: privacyPolicy
+      summary: Privacy Policy
+      description: Returns the privacy policy in HTML format.
+      responses:
+        '200':
+          description: Successfully retrieved privacy policy.
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Privacy policy not found.
 components:
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
-paths:
-  /encrypt:
-    post:
-      summary: Encrypt text
-      description: Encrypts plain text into a string of emojis.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                text:
-                  type: string
-                  description: Plain text to encrypt.
-              required:
-                - text
-      responses:
-        '200':
-          description: Text successfully encrypted.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  encrypted_text:
-                    type: string
-                    description: Encrypted text represented by emojis.
-        '400':
-          description: Bad request, possibly due to missing text in the request body.
-  /decrypt:
-    post:
-      summary: Decrypt text
-      description: Decrypts a string of emojis back into plain text.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                encrypted_text:
-                  type: string
-                  description: Encrypted text (emojis) to decrypt.
-              required:
-                - encrypted_text
-      responses:
-        '200':
-          description: Text successfully decrypted.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  text:
-                    type: string
-                    description: Decrypted plain text.
-        '400':
-          description: Bad request, possibly due to missing encrypted_text in the request body.
+      name: Authorization
+
+  schemas:
+    EncryptRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          description: Plain text to be encrypted.
+    EncryptResponse:
+      type: object
+      properties:
+        encrypted_text:
+          type: string
+          description: Encrypted text using emojis.
+    DecryptRequest:
+      type: object
+      required:
+        - encrypted_text
+      properties:
+        encrypted_text:
+          type: string
+          description: Emoji cipher text to be decrypted.
+    DecryptResponse:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Decrypted plain text.
+security:
+  - ApiKeyAuth: []
