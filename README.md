@@ -1,6 +1,3 @@
-✖️ Below is a comprehensive `README.md` for your Flask application, structured at an A+ level with detailed explanations for each component, usage instructions, and deployment strategies.
-
-```markdown
 # Emoji Encryption and Decryption API
 
 ## Introduction
